@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="sale.report_invoice_document_inherit_sale" inherit_id="account.report_invoice_document">
+</template>
+
+<template id="sale_stock.report_invoice_document_inherit_sale_stock" inherit_id="account.report_invoice_document">
+</template>
+
+<template id="account.report_invoice_document_with_payments" inherit_id="account.report_invoice_document">
+</template>
+
+<template id="account.report_invoice_document">
+    <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+        <div class="header">
+            <div class="o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-6">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height:100px;"/>
+                    </div>
+                    <div class="col-6 text-right mb4">
+                        <div name="company_address" class="mb4">
+                            <h4 class="mt0" t-esc="o.company_id.commercial_name"/>
+                            <strong><t t-esc="o.company_id.name"/></strong><br/>  
+                            <span>
+                                <t t-esc="o.company_id.identification_id.name"/>: <t t-esc="o.company_id.vat"/><br/>
+                                <t t-if="o.company_id.street" t-esc="o.company_id.street"/>, 
+                                <t t-if="o.company_id.street2" t-esc="o.company_id.street2"/><br/>
+                                <t t-if="o.company_id.district_id" t-esc="o.company_id.district_id.name"/>,
+                                <t t-if="o.company_id.county_id" t-esc="o.company_id.county_id.name"/>,
+                                <t t-if="o.company_id.country_id" t-esc="o.company_id.country_id.name"/><br/>
+                                Tel.<t t-if="o.company_id.phone" t-esc="o.company_id.phone"/> | Correo: <t t-if="o.company_id.email" t-esc="o.company_id.email"/> 
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!---//end header-->
+        <div class="page" style="width:100%">
+             <table class="article o_report_layout_boxed" style="width:100%; margin-top:10px">
+                <tr>
+                    
+                    <td style="width:50%"> <!--INFORMACION DEL CLIENTE-->
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+                            <strong>Proveedor:</strong>
+                        </span>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <strong>Cliente: </strong>
+                        </span>
+                        <t t-if="o.partner_id.parent_id">
+                            <strong><span style="font-size:14px" t-field="o.partner_id.parent_id.name"/></strong>
+                        </t>
+                        <strong><span style="font-size:14px" t-field="o.partner_id.name"/></strong><br/>
+                        <strong><span t-field="o.partner_id.identification_id"/>: </strong><span t-field="o.partner_id.vat"/><br/>
+                        <strong>Correo: </strong><span t-field="o.partner_id.email"/><br/>
+                        <strong>Teléfono: </strong><span t-field="o.partner_id.phone"/><br />
+                        <strong>Dirección: </strong>
+                        <t t-if="o.partner_id.street" t-esc="o.partner_id.street"/>
+                        <t t-if="o.partner_id.street2" t-esc="o.partner_id.street2"/><br />
+                        <t t-if="o.partner_id.district_id" t-esc="o.partner_id.district_id.name"/>,
+                        <t t-if="o.partner_id.county_id" t-esc="o.partner_id.county_id.name"/>,
+                        <t t-if="o.partner_id.country_id" t-esc="o.partner_id.country_id.name"/>
+                        
+                    </td> <!--FIN DE INFORMACION DEL CLIENTE-->
+
+                    <td> <!--INFORMACION DEL DOCUMENTO-->
+                        <t t-if="o.type == 'in_invoice'">
+                            <span style="font-weight:bolder" t-if="not o.number_electronic">FACTURA: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='FE'">FACTURA ELECTRONICA: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='FEC'">FACTURA ELECTRONICA COMPRA: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='TE'">TIQUETE ELECTRONICO: </span>
+                        </t>
+                        <t t-if="o.type == 'out_invoice'">
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='FE'">FACTURA ELECTRONICA: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='TE'">TIQUETE ELECTRONICO: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='FEE'">FACTURA ELECTRONICA DE EXPORTACION: </span>
+                            <span style="font-weight:bolder" t-if="o.number_electronic and o.tipo_documento=='ND'">NOTA DEBITO ELECTRONICA: </span>
+                            <span style="font-weight:bolder" t-if="not o.number_electronic">FACTURA: </span>
+                        </t>
+                        <t t-if="o.type == 'out_refund' or o.type == 'in_refund'">
+                            <span style="font-weight:bolder" t-if="o.number_electronic">NOTA DE CRÉDITO ELECTRONICA: </span>
+                            <span style="font-weight:bolder" t-if="not o.number_electronic">NOTA DE CRÉDITO: </span>
+                        </t>
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'" t-esc="o.reference"/>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'" t-esc="o.number_electronic and o.number_electronic[21:41] or o.number"/><br/>
+                        <strong>Clave: </strong>  <span t-field="o.number_electronic"/><br/>
+                        <strong>Fecha Emisión: </strong>
+                        <span t-esc="o.date_issuance and (o.date_issuance[8:10]) or o.date_invoice and (o.date_invoice[8:10]) or ''"/>/ 
+                        <span t-esc="o.date_issuance and (o.date_issuance[5:7]) or o.date_invoice and (o.date_invoice[5:7]) or ''"/>/ 
+                        <span t-esc="o.date_issuance and (o.date_issuance[0:4]) or o.date_invoice and (o.date_invoice[0:4]) or ''"/>
+                        Hora: <span t-esc="o.date_issuance and (o.date_issuance[11:16]) or ''"/><br />
+                        <strong>Fecha Vencimiento: </strong><span t-field="o.date_due"/><br />
+                        <strong>Medio de pago: </strong><span t-esc="o.payment_methods_id and o.payment_methods_id.name or 'Efectivo'"/><br />
+                        <strong>Moneda: </strong><span t-field="o.currency_id.name"/> | 
+                        <strong>Tipo Cambio: </strong><span t-esc="o.amount_total_company_signed / o.amount_total_signed"/><br />
+                        <span t-if="o.type == 'in_invoice' or o.type == 'in_refund'">
+                            <br/><strong>Usuario: </strong> <span t-field="o.user_id.name"/>
+                        </span>
+                        <span t-if="o.type == 'out_invoice' or o.type == 'out_refund'">
+                            <strong>Vendedor: </strong> <span t-field="o.user_id.name"/>
+                        </span>
+
+                    </td><!--FIN DE INFORMACION DEL DOCUMENTO-->
+                </tr>
+            </table>
+            <div name="reference"/>
+                <!-- Is there a discount on at least one line? -->
+                <t t-set="display_discount" t-value="any([l.discount for l in o.invoice_line_ids])"/>
+            <br/>
+            <div class="content">
+                <div class="oe_structure">
+                    <table class="table table-sm o_main_table">
+                        <thead class="tble-header">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cant.</th>
+                                <th class="text-center">Precio</th>
+                                <th t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">Des.(%)</th>
+                                <th class="text-center">Impuesto</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="o.invoice_line_ids" t-as="l" style="height:25px;font-size:16px">
+                                <td><span t-field="l.name"/></td>
+                                <td class="text-center">
+                                    <span t-field="l.quantity"/>
+                                    <span t-field="l.uom_id" groups="product.group_uom"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                                <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
+                                    <span t-field="l.discount"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-if="l.invoice_line_tax_ids" t-esc="', '.join(map(lambda x: (x.description or x.name), l.invoice_line_tax_ids))"/>
+                                    <span t-if="not l.invoice_line_tax_ids">EXE</span>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr style="height:25px;">
+                                <td colspan="6" class="text-center">
+                                    ********** Ultima Línea **********
+                                </td>
+                            </tr>
+                            <tr style="margin-top:30px;">
+                                <td class="text-left">
+                                   <t t-if="o.comment">
+                                       <strong>Comentarios: </strong><span t-field="o.comment" />
+                                   </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="total" class="row justify-content-end">
+                        <div class="col-4">
+                            <table class="table table-sm">
+                                <tr class="border-black">
+                                    <td><strong>Subtotal</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Impuestos</td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black o_total">
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="footer o_boxed_footer">
+                <div class="text-center">
+                    <ul class="list-inline">
+                        <li t-if="o.company_id.phone" class="list-inline-item">Tel: <span t-field="o.company_id.phone"/></li>
+                        <li t-if="o.company_id.email" class="list-inline-item">| Correo: <span t-field="o.company_id.email"/></li>
+                        <li t-if="o.company_id.website" class="list-inline-item">| Web: <span t-field="o.company_id.website"/></li>
+                    </ul>
+                    <p style="align:center">
+                    Autorizado mediante la resolución DGT-R-033-2019 del 20 de junio de 2019 de la Dirección General de Tributación.<br/>
+                    Versión del Documento Electrónico: 4.3
+                    </p>
+                    <div t-if="report_type == 'pdf'">
+                        Page: <span class="page"/> / <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</template>
+
+<template id="account.report_invoice">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="account.report_invoice_document" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>
+
+
+
