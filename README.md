@@ -4,5 +4,5 @@ Este repositorio contiene:
 2. El modulo de cr_electronic_invoice_qweb_fe_boxed, el cual ajustas las vistas qweb de la factura, con un estilo basado en el reporte "boxed_layout"
 
 
-Made with ❤ by jartavia05
+Made with ❤ by jartavia05 - 
 Open source prevents backdoors
