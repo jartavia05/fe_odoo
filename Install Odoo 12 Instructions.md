@@ -1,4 +1,4 @@
-# Instructions to Install Odoo 12 in Ubuntu 18.04 with nginx and Let's Encrypt
+# Install Odoo 12 in Ubuntu 18.04 with nginx and Let's Encrypt
 
 ## Update OS
 ```
