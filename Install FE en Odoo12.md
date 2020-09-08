@@ -1,4 +1,4 @@
-# Instructions to Install Electronic Invoice from https://github.com/odoocr/l10n_cr
+# Instalar modulo de Factura Electronica de https://github.com/odoocr/l10n_cr
 
 ## Introduccion
 ```
